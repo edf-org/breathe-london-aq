@@ -1,0 +1,73 @@
+<html> 
+        <head> 
+          <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+
+                 <!-- Make sure you put this AFTER Leaflet's CSS -->
+          <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+           integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+           crossorigin=""></script>
+          <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+          <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        </head> 
+
+        <body>
+        <!-- Using inline style instead of CSS to keep this a one file program -->
+        <!-- For example
+        <div id="mydivid" style="height: 200px; width: 200px; background-color: blue;"></div>
+        -->
+            <div id="mapid" style="height: 600px;"></div>
+            <div id="controlsid" style="display: inline; width: 400px; height:300px;float:left;">
+              <select id="speciesid">
+                <option value="no2">NO2</option>
+                <option value="pm2_5">PM 2.5</option>
+                <option value="no">NO</option>
+                <option value="o3">O3</option>
+                <option value="co2">CO2</option>
+                <option value="bc">BC</option>
+                <option value="pm2_5_drvct">Drive count (PM)</option>
+              </select>
+              <br><input type="checkbox" id="polygoncheck" onclick="showPolygons()">Show drive polygons
+              <br><input type="checkbox" id="ptsrccheck" onclick="showPtsrcs()">Show point sources
+              <br><input type="checkbox" id="roadcheck" onclick="showRoads()">Show roads
+              <input type="range" min="0" max="50" value="0" id="drivecountrange">
+              <span id="drivecountsliderval"></span><span> (min # drives)</span>
+              <br><input type="checkbox" id="aqmeshcheck" onclick="showAQMesh()">Show AQMesh
+              <br><input type="checkbox" id="tempbiascheck" onclick="showTempbias()">Show temporal bias estimates
+              <br>
+              <div id="hotspotid" style="display: inline;">
+                      <input type="checkbox" id="hotspotcheck" onclick="showHotspots()">Show NO2 hotspots
+                      <select id="hot_ab_id">
+                              <option value="a">Total concentration method</option>
+                              <option value="b">Departure concentration method</option>
+                      <input type="range" min="1" max="3" value="1" id="uncertaintyrange">
+                      <span id="sliderval"></span><span> %</span>
+                      <a href="https://storage.cloud.google.com/london-viz/uncertainty_pct.png"> Measurement uncertainty</a>
+                      </select>
+                      <!--
+                      <a href="https://storage.cloud.google.com/london-viz/baseline.png">Baseline options</a>
+                      -->
+              </div>
+              <br><a href="https://storage.cloud.google.com/london-viz/readme.txt">Readme</a>
+              <br>
+              <br>
+                <select id="percentileid">
+                  <option value="">Show background at nth percentile</option>
+                  <option value="z_1pct">1%</option>
+                  <option value="z_5pct">5%</option>
+                  <option value="z_10pct">10%</option>
+                  <option value="z_50pct">50%</option>
+                </select>
+            </div>
+            <div id="tsplotid" style="height: 300px;width: 400px;display:inline;float:right;"></div>
+            <br>
+            <div id="surfaceplotid" style="height: 600px;width: 600px;display:inline-block;position:relative;float:left;"></div>
+            <div id="iqrplotid" style="height: 300px;width: 600px;display:inline-block;position:relative;float:left;"></div>
+            <!--
+            <script type = "text/javascript" src = "london_2019Aug07.js"></script>
+            <script type = "text/javascript" src = "https://storage.cloud.google.com/london-viz/london_2019Aug07.js"></script>
+            -->
+            <script type = "text/javascript" src = "https://storage.cloud.google.com/london-viz/london.js"></script>
+        </body>
+</html>

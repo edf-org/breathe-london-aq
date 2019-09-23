@@ -1,0 +1,17 @@
+*.py~
+.gitignore~
+*.bat~
+*.pyc
+*.swp
+__pycache__
+tmp/
+archive/
+dashboards/test/
+*.json
+*.geojson
+./archive/
+*.zip
+*.csv
+*~
+*.png
+*.dat

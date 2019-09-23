@@ -1,0 +1,3 @@
+python test_stage0_0_removeduplicates.py
+python test_stage1_1_alignlatlon.py
+python test_stage2a_2_maketable.py
