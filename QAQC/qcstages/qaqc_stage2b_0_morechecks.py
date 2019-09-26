@@ -100,7 +100,7 @@ def limit_latlon(n,s,e,w):
 #humidity checks
 def limit_rh():
     #dictionary of thresholds
-    rh_thresh_dict = {95:{'d':[3,8],'p':[32,33,34,140]}, 80:{'d':[4],'p':[45,47]}}
+    rh_thresh_dict = {95:{'d':[3,8],'p':[32,33,34,140]}}
     #loop over dictionary
     for k,v in rh_thresh_dict.items():
         qry_str = ("""update {0} a
@@ -385,7 +385,6 @@ def flag_spatial_resolution(lim):
 #exceptional event checks
 #guts tickets
 #review manually
-"""
 print('flagging concentrations above maximum detection limits')
 limit_max()
 print('flagging concentrations below low limits')
@@ -394,7 +393,6 @@ print('flagging relative humidity outside operating conditions')
 limit_rh()
 print('limiting lat/lon to london bounds including am')
 limit_latlon(52.06, 51.24, 0.31, -2.2) #n,s,e,w
-"""
 print('recovering accidental use of service check')
 service_check([[52.01,52.00,-2.12,-2.14],[51.4257,51.4253,-0.3452,-0.3458]]) #am and npl
 print('flagging temperatures outside -10-50 C for pdr and naneos')

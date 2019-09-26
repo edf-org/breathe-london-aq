@@ -3,11 +3,14 @@ Project: London GSV
 
 ## Objective
 Scoping study of temporal bias in mobile data collection.
-Compare distributions of AQMesh stationary data at full temporal resolution within the mobile collection period (a. all times, b. all daytime,weekday times) to distributions of AQMesh stationary data only at the same times (nearest minute) of mobile sampling within the mobile collection period (selected subset). Every road segment will have two bias statistics: bias_a = (selected subset median - all time median)/(all time median)* 100 and bias_b = (selected subset daytime,weekly median - all daytime,weekday median)/(all daytime,weekday median)* 100. Comparison should be completed for all species, however we currently have only AQMesh data for NO2.  
-The AQMesh timeseries will be derived from individual pods in the ULEZ that have data going back to Fall of 2018 (> 6000 hours) and the median of all such pods to test the sensitivity of results to our choice of stationary data. Bias calcs will be grouped and summarized by the number of mobile drive times included in the measurement subset.
+Compare distributions of stationary data at full temporal resolution within the mobile collection period (a. all times, b. all daytime,weekday times) to distributions of stationary data only at the same times (nearest minute) of mobile sampling within the mobile collection period (selected subset). Every road segment will have two bias statistics: bias_a = (selected subset median - all time median)/(all time median)* 100 and bias_b = (selected subset daytime,weekly median - all daytime,weekday median)/(all daytime,weekday median)* 100. Comparison should be completed for all species as data becomes available.  
+
+The stationary timeseries will be derived from individual sites in the ULEZ that have data going back to Fall of 2018 (> 6000 hours) and the median of all such pods to test the sensitivity of results to our choice of stationary data. Bias calcs will be grouped and summarized by the number of mobile drive times included in the measurement subset.
 
 ## Data sources
 - street-view-air-quality-london BQ datasets
+- Breathe London datasets
+- LAQN 
 
 ## Scripts
 **Step:** 0  
@@ -43,7 +46,7 @@ The AQMesh timeseries will be derived from individual pods in the ULEZ that have
 *Purpose:* Calc 5th, 25th, 50th, 75th and 95th percentile percent bias at each of N drives.  
 *Output:* dataframe of summary stats
 
-**Path:** ..\temporal_bias\tempbias2_AQMeshrestrictedcomparison.py  
+**Path:** ..\temporal_bias\tempbias0_AQMeshcomparison.py  
 **Requirements:** Google cloud API python client and bigquery with pandas, ggplot, pandas, central_tendency processing and corresponding output tables  
 **Output:** ..\charts\bias_restricted.png and n_segments_restricted.png
 

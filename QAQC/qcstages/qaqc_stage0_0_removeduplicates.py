@@ -44,7 +44,7 @@ UNION ALL
 SELECT a.timestamp, a.node_id, a.parameter_id, a.status, a.value, a.id, a.vid FROM cte0 a
 JOIN cte2 b ON a.vid=b.vid AND a.node_id = b.node_id AND a.timestamp = b.timestamp 
 )
-WHERE timestamp <'2019-09-01'
+WHERE timestamp <'2019-09-24'
 """.format(srctable_str))
 qry_job = bqclient.query(qry_str,location='EU',job_config=job_config)
 
