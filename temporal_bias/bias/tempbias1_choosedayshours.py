@@ -1,10 +1,25 @@
+#This program is an air quality monitoring data post-processing and analysis routine
+#prepared by Environmental Defense Fund.
+
+#For details on how to use this program refer to the doc/ folder in each root
+#subfolder.
+
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.   This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details at root level in LICENSE.txt
+#or see http://www.gnu.org/licenses/.
+
 from google.cloud import bigquery
 from google.oauth2 import service_account
 import ggplot as gg
 import pandas as pd
 
 credentials = service_account.Credentials.from_service_account_file(
-    r"..\..\pks\street-view-air-quality-london-dc8f329b26cf.json")
+    r"..\..\..\pks\street-view-air-quality-london-dc8f329b26cf.json")
 project_id = 'street-view-air-quality-london'
 bqclient = bigquery.Client(credentials=credentials,project=project_id)
 job_config = bigquery.QueryJobConfig()
@@ -22,7 +37,7 @@ order by ct desc
 qry_job = bqclient.query(qry_str,location='EU',job_config=bigquery.QueryJobConfig())
 #save result as dataframe
 df = qry_job.to_dataframe()
-df.to_csv(r'.\charts\hourdistrib.csv')
+df.to_csv(r'..\charts\hourdistrib.csv')
 print("Hour distribution")
 print(df)
 
@@ -40,7 +55,7 @@ order by ct desc
 qry_job = bqclient.query(qry_str,location='EU',job_config=bigquery.QueryJobConfig())
 #save result as dataframe
 dfw = qry_job.to_dataframe()
-dfw.to_csv(r'.\charts\weekdaydistrib.csv')
+dfw.to_csv(r'..\charts\weekdaydistrib.csv')
 print("Weekday distribution")
 print(dfw)
 

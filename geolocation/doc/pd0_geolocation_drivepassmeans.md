@@ -41,7 +41,7 @@ To generate an appropriately uniform grid along roads, section segments, and acc
 *Note:* needs refresh every time UK.stage3_test updates
 
 >*Scripted query:* 1  
-*Purpose:* This is the heavy lifter doing the snapping. Find the distance between drive second points and road segments, joining on polygon ID and point lat/lon with road segment centroid lat/lon rounded to 2 or 3 decimal places (a search distance of ~1000 m and ~100 m, respectively). Limiting the number of points that join to a segment is a major time saver.  
+*Purpose:* This is the heavy lifter doing the snapping. Find the distance between drive second points and the nearest road segment centerline point. A join on point lat/lon to road segment centroid lat/lon rounded to 3 decimal places restricts the search to a distance of ~100 m (i.e. if measurements are more than 100 m away from a segment centroid, the uncertainty is too great to match them). Limiting the number of points that join to a segment is a major time saver.  
 *Output:* UK.snap1_distance_pt2road  
 *Note:* using ST_WITHIN to limit the results returned greatly slowed things down, better to join on rounded coordinates. 
 

@@ -1,3 +1,18 @@
+#This program is an air quality monitoring data post-processing and analysis routine
+#prepared by Environmental Defense Fund.
+
+#For details on how to use this program refer to the doc/ folder in each root
+#subfolder.
+
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.   This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details at root level in LICENSE.txt
+#or see http://www.gnu.org/licenses/.
+
 #Median mobile data for Breathe London Map
 #Limit to Aug 31st and minimum of 10 drives
 
@@ -46,14 +61,14 @@ select a.segid as segid
 --, polyid
 , a.geowkt as the_geom, a.function, a.name1
 --, a.numbertoid
-,pm2_5_med, pm2_5_drvct
-,co2_med, co2_drvct
-,no_med, no_drvct
-,bc_med, bc_drvct
-,o3_med, o3_drvct
---,no2_med
-, no2_med*(1/0.52) as no2_med, no2_drvct
-,noxasno2_med, noxasno2_drvct
+,pm2_5_med as pm2_5_med_ugm3, pm2_5_drvct
+--,co2_med, co2_drvct
+--,no_med, no_drvct
+--,bc_med, bc_drvct
+--,o3_med, o3_drvct
+,no2_med as no2_med_ppb
+, no2_med*(1/0.52) as no2_med_ugm3, no2_drvct
+--,noxasno2_med, noxasno2_drvct
 ,speedkmh_med, speedkmh_drvct
 --,pm2_5time_arr, pm2_5mean_arr
 --,no2time_arr, no2ugm3_arr

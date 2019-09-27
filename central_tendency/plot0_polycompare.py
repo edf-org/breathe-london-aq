@@ -1,3 +1,18 @@
+#This program is an air quality monitoring data post-processing and analysis routine
+#prepared by Environmental Defense Fund.
+
+#For details on how to use this program refer to the doc/ folder in each root
+#subfolder.
+
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.   This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details at root level in LICENSE.txt
+#or see http://www.gnu.org/licenses/.
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -9,14 +24,14 @@ import glob
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
-credentials = service_account.Credentials.from_service_account_file(r"C:\Users\lpadilla\Documents\London\Scripts\pks\street-view-air-quality-london-dc8f329b26cf.json")
+credentials = service_account.Credentials.from_service_account_file(r"..\..\pks\street-view-air-quality-london-dc8f329b26cf.json")
 project_id = 'street-view-air-quality-london'
 client = bigquery.Client(credentials=credentials,project=project_id)
 location = 'EU'
 dataset_str = 'UK'
 
 register_matplotlib_converters()
-root_path = r"C:\Users\lpadilla\Documents\London\Data\Intermediate\grid_snap_road\testmeddrivepassmeans"
+root_path = r"..\..\..\Data\Intermediate\grid_snap_road\testmeddrivepassmeans"
 src_path = os.path.join(root_path,"snap4_drivesummarystats_19Jun27.csv")
 
 df = pd.read_csv(src_path,index_col=False)

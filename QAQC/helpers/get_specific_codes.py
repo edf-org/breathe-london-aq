@@ -1,12 +1,27 @@
+#This program is an air quality monitoring data post-processing and analysis routine
+#prepared by Environmental Defense Fund.
+
+#For details on how to use this program refer to the doc/ folder in each root
+#subfolder.
+
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.   This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details at root level in LICENSE.txt
+#or see http://www.gnu.org/licenses/.
+
 #create hex to status lookup table
 import numpy as np
 import pandas as pd
 import itertools as it
 from qaqchelpers_2019Feb5 import hex2bin, bin2bits
 
-dev_path_str = r"C:\Users\lpadilla\Documents\London\Data\Intermediate\results-20190214-172304.csv"
-status_path_str = r"C:\Users\lpadilla\Documents\London\Data\Intermediate\statuses.csv"
-out_path_str = r"C:\Users\lpadilla\Documents\London\Data\Intermediate\status_summary_2019Feb12.csv"
+dev_path_str = r"..\..\..\..\Data\Intermediate\results-20190214-172304.csv"
+status_path_str = r"..\..\..\..\Data\Intermediate\statuses.csv"
+out_path_str = r"..\..\..\..\Data\Intermediate\status_summary_2019Feb12.csv"
 f = open(out_path_str,'w')
 f.write('vid,dev_id,duration(h),status,bin_str,status_flag,qc_flag,status_desc\n')
 

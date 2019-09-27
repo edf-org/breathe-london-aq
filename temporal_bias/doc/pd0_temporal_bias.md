@@ -20,12 +20,12 @@ The stationary timeseries will be derived from individual sites in the ULEZ that
 *Purpose:* Calc 5th, 25th, 50th, 75th and 95th percentile percent bias at each of N drives.  
 *Output:* dataframe of summary stats
 
-**Path:** ..\temporal_bias\tempbias0_AQMeshcomparison.py  
+**Path:** ..\temporal_bias\bias\tempbias0_AQMeshcomparison.py  
 **Requirements:** Google cloud API python client and bigquery with pandas, ggplot, pandas, central_tendency processing and corresponding output tables  
 **Output:** ..\charts\bias.png and n_segments.png
 
 **Step:** 1  
-**Purpose:** To determine which days and hours should be included in daytime, weekday restricted comparison. 
+**Purpose:** To determine which days and hours should be included in daytime, weekday restricted comparison.  
 
 > *Scripted Query:* 0  
 *Purpose:* Calc distribution of mobile measurement hours of the day 
@@ -35,18 +35,18 @@ The stationary timeseries will be derived from individual sites in the ULEZ that
 *Purpose:* Calc distribution of mobile measurement days of the week 
 *Output:* print day of week and percentage of samples to console and csv
 
-**Path:** ..\temporal_bias\tempbias1_choosedayshours.py  
+**Path:** ..\temporal_bias\bias\tempbias1_choosedayshours.py  
 **Requirements:** Google cloud API python client and bigquery with pandas, pandas, central_tendency processing and corresponding output tables  
 **Output:** ..\charts\[*].csv indicating drives primarily occurred on M-F and between 4am and 11pm
 
 **Step:** 2  
-**Purpose:** To calculate percent bias, summarize by number of drives for case where only M-F, 4am-11pm times are included, and plot percent bias as a function of N drives. 
+**Purpose:** To calculate percent bias, summarize by number of drives for case where only M-F, 4am-11pm times are included, and plot percent bias as a function of N drives. Approximately 95% of measurements were collected M-F and more than 98% of measurements were collected 4am-11pm.   
 
 > *Scripted Query:* 0  
 *Purpose:* Calc 5th, 25th, 50th, 75th and 95th percentile percent bias at each of N drives.  
 *Output:* dataframe of summary stats
 
-**Path:** ..\temporal_bias\tempbias0_AQMeshcomparison.py  
+**Path:** ..\temporal_bias\bias\tempbias0_AQMeshcomparison.py  
 **Requirements:** Google cloud API python client and bigquery with pandas, ggplot, pandas, central_tendency processing and corresponding output tables  
 **Output:** ..\charts\bias_restricted.png and n_segments_restricted.png
 
@@ -57,7 +57,7 @@ The stationary timeseries will be derived from individual sites in the ULEZ that
 *Purpose:* Select the segments, geometry and bias estimates.  
 *Output:* ..\charts\map.csv
 
-**Path:** ..\temporal_bias\tempbias3_maptemporalbias.py  
+**Path:** ..\temporal_bias\bias\tempbias3_maptemporalbias.py  
 **Requirements:** Google cloud API python client and bigquery with pandas, pandas, central_tendency processing and corresponding output tables  
 **Output:** ..\charts\map.csv 
 

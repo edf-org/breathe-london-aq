@@ -1,8 +1,23 @@
+#This program is an air quality monitoring data post-processing and analysis routine
+#prepared by Environmental Defense Fund.
+
+#For details on how to use this program refer to the doc/ folder in each root
+#subfolder.
+
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.   This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details at root level in LICENSE.txt
+#or see http://www.gnu.org/licenses/.
+
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
 credentials = service_account.Credentials.from_service_account_file(
-    r"C:\Users\lpadilla\Documents\London\Scripts\pks\street-view-air-quality-london-dc8f329b26cf.json")
+    r"..\..\..\pks\street-view-air-quality-london-dc8f329b26cf.json")
 project_id = 'street-view-air-quality-london'
 client = bigquery.Client(credentials=credentials,project=project_id)
 
@@ -16,7 +31,7 @@ job_config.write_disposition = 'WRITE_TRUNCATE' #overwrite table if exists
 
 #load device table
 
-filename_str = r"C:\Users\lpadilla\Documents\London\Data\Intermediate\QAQC\devices.csv"
+filename_str = r"..\..\..\..\Data\Intermediate\QAQC\devices.csv"
 table_str = 'qaqc_devices_lookup'
 table_ref = dataset_ref.table(table_str)
 job_config.schema = [bigquery.SchemaField('dev_id','INTEGER'), \
@@ -39,7 +54,7 @@ print('Loaded {} rows into {}:{}.'.format(
 
 #load parameters table
 
-filename_str = r"C:\Users\lpadilla\Documents\London\Data\Intermediate\QAQC\parameters.csv"
+filename_str = r"..\..\..\..\Data\Intermediate\QAQC\parameters.csv"
 table_str = 'qaqc_parameters_lookup'
 table_ref = dataset_ref.table(table_str)
 job_config.schema = [bigquery.SchemaField('field_name','STRING'), \
@@ -69,7 +84,7 @@ print('Loaded {} rows into {}:{}.'.format(
 
 #load lagtimes table
 
-filename_str = r"C:\Users\lpadilla\Documents\London\Data\Intermediate\QAQC\lagtimes.csv"
+filename_str = r"..\..\..\..\Data\Intermediate\QAQC\lagtimes.csv"
 table_str = 'qaqc_lagtimes_lookup'
 table_ref = dataset_ref.table(table_str)
 job_config.schema = [bigquery.SchemaField('node_id','STRING'),\
