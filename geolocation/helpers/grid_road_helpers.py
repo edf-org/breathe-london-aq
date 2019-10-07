@@ -26,7 +26,10 @@ import collections as coll
 import numpy as np
 import uuid
 
-#schema_list is a list of (name,datatype) tuples describing each table columne
+#wkt2bq is a python approach to loading geographic data into Google's BigQuery
+#from a csv file with well-known-text format for the geography
+#The BQ command line interface load function is another option and uses less code
+#schema_list is a list of (name,datatype) tuples describing each table column
 #where name and datatype are strings
 def wkt2bq(csvpath_str, client, dataset, schema_list, rowskip=0, location='US'):
     dataset_ref = client.dataset(dataset)
@@ -65,51 +68,8 @@ def wkt2bq(csvpath_str, client, dataset, schema_list, rowskip=0, location='US'):
         job.output_rows, dataset, table_str))
 
 
-def roads1_intersection_pts(client, tb, geom_field, uniqueid_field,location='US',job_config=bigquery.QueryJobConfig()):
-
-    sql_str=("""
-    with cte0 as (
-    select DISTINCT ST_ASTEXT(ST_INTERSECTION(a.{1}, b.{1})) as ipt 
-    , a.{2}
-    , ST_ASTEXT(a.{1}) as geom_str
-    from {0} a, {0} b
-    where ST_INTERSECTS(a.{1},b.{1}) 
-    )
-    , cte1 as (
-    select {2}, geom_str, ipt as ipt, REGEXP_EXTRACT(ipt,r'[^,\(\)A-Z]+') as pts from cte0
-    where ST_DIMENSION(ST_GEOGFROMTEXT(ipt))=0 --include only point intersections 
-    and NOT ST_ISCOLLECTION(ST_GEOGFROMTEXT(ipt)) --not multipoint
-    UNION ALL
-    --split the multipoints
-    select {2}, geom_str, CONCAT('POINT(',pts,')') as ipt, pts
-    from cte0, UNNEST(REGEXP_EXTRACT_ALL(ipt, r'[^,\(\)A-Z]+')) as pts 
-    where ST_DIMENSION(ST_GEOGFROMTEXT(ipt))=0 --inlude only point intersections
-    and ST_ISCOLLECTION(ST_GEOGFROMTEXT(ipt)) --where multipoint
-    )
-    , cte2 as (
-    select 
-    --check for strings that didn't split properly (end with parenthesis) => length is full linestring
-    --check for strings that split on first point and would be one-pt linestrings => length is 0
-    IF(ARRAY_LENGTH(SPLIT(CONCAT(SPLIT(geom_str,pts)[OFFSET(0)],pts,')'),','))>1,IF(ENDS_WITH(SPLIT(geom_str,pts)[OFFSET(0)],')'),ST_LENGTH(ST_GEOGFROMTEXT(geom_str)), ST_LENGTH(ST_GEOGFROMTEXT(CONCAT(SPLIT(geom_str,pts)[OFFSET(0)],pts,')')))),0)
-    as distalongline
-    , {2}, geom_str, ipt
-    from cte1
-    )
-    select a.{2}, geom_str, ARRAY_TO_STRING(ARRAY_AGG(ipt order by distalongline),',') as pt_arr
-    from {0} a
-    left join cte2 on a.{2} = cte2.{2}
-    group by a.{2}, geom_str
-        """).format(tb, geom_field, uniqueid_field)
-    #run query
-    job = client.query(sql_str,location=location,job_config=job_config)
-    wktlist = []
-    #loop over results
-    for row in job.result():
-        wktlist.append(split_one_line(row.pts_str,row.geom_str))
-
-    #send result to bq and shp file
-    #TODO
-
+#split_one_line takes as input the WKT representation of the line to split and a comma-separated string of points
+#at which to split it. The function returns a list of linestrings that are subsegments of the original line 
 def split_one_line(pts_str, line_str):
     pts_list = [s.replace('POINT(','').replace(')','') for s in pts_str.split(',')]
     b = line_str.replace('LINESTRING(','').replace(')','')
@@ -131,9 +91,12 @@ def split_one_line(pts_str, line_str):
     #print(lines_list)
     return lines_list
 
+#approximate conversion of latitude and longitude in decimal degrees to x,y coordinates in m
+#x,y coordinates are also known as easting and northing in some datasets
 def lonlat2xy(lon,lat):
     return lon*111111*np.cos(lat),lat*111111
 
+#determine whether a point is on the line defined by coordinate pairs a and b and between a and b
 def is_on_segment(pt,a,b):
     x1,y1 = lonlat2xy(a.lon,a.lat)
     x2,y2 = lonlat2xy(b.lon,b.lat)
@@ -149,6 +112,7 @@ def is_on_segment(pt,a,b):
         #print(rhat,r,thetahat,theta)
     return ison
 
+#returns true for linestrings that have non-zero length
 def is_nonzero_linestring(vlist):
     if len(vlist)>2 or (len(vlist)==2 and vlist[0]!=vlist[1]):
         isnonzero = True
@@ -156,6 +120,10 @@ def is_nonzero_linestring(vlist):
         isnonzero = False
     return isnonzero
 
+#split_one_line2 is an improved version that takes as input the WKT representation of the line to split,
+#a comma-separated string of points at which to split it, and any other fields that should be inherited 
+#by the new split lines. The function returns a list of linestrings that are subsegments of the original line 
+#This version better handles whitespace and unusual WKT formatting than its predecessor 
 def split_one_line2(pts_str, line_str,other_list):
     #other_list is list of additional fields that should be included with each new line segment
     lines_list = []
@@ -190,7 +158,8 @@ def split_one_line2(pts_str, line_str,other_list):
             lines_list.append(['LINESTRING('+','.join(vertices_list)+')',uuid.uuid4()]+other_list)
     return lines_list
 
-#This is a top-level call, makes use of generate_30m_points, split_one_line2
+#split_at_gridded_points is a top-level call, makes use of generate_30m_points, split_one_line2
+#Returns a shape file with the new split lines, a table in BQ, and csvs with the split points and lines
 def split_at_gridded_points(client, data, outfc, geom_field, uniqueid, otherfield_str,location, job_config=bigquery.QueryJobConfig()):
     #return list of new split linestrings
     #wkt_list will have one column of linestrings, a unique id, and optional additional attributes carried along 
@@ -227,6 +196,7 @@ def split_at_gridded_points(client, data, outfc, geom_field, uniqueid, otherfiel
     print("Saved table {0} to BQ".format(tbout_str))
     return fc
 
+#generate_30m_points determines lat,lon pairs at which to split lines with roughly 30 m spacing (targeting 20 to 40 m).
 #Expected inputs are source table in BQ with linestring geometry in geom_field and unique segment id in uniqueid
 #Source geometry should be intersection to intersection segments
 def generate_30m_points(client, tb, geom_field, uniqueid, other_fields, location='US',job_config=bigquery.QueryJobConfig()):

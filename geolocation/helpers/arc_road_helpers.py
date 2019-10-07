@@ -22,6 +22,7 @@ import csv
 import datetime as dt
 import codecs
 
+#create shapefile from Well-Known-Text data format
 def wkt2shp(incsv_orlist,outfc,fieldin_list, fieldout_list,typeout_list, order_list):
     sr = arcpy.SpatialReference(4326) #set to WGS 1984
     arcpy.env.overwriteOutput = True
@@ -59,6 +60,7 @@ def wkt2shp(incsv_orlist,outfc,fieldin_list, fieldout_list,typeout_list, order_l
         curs_out.insertRow(out_list)
     return outfc
 
+#create Well-Known-Text csv dataset from shapefile
 def shp2wkt(fc,outcsv,fieldin_list):
     #make a copy in a temporary folder removing any Z, M values
     temp_path = os.path.join(os.path.dirname(fc),'temp'+dt.datetime.today().strftime('%y%b%d_%H%M%S'))

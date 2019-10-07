@@ -50,7 +50,11 @@ for c in charts:
     #save result as dataframe
     df_a = qry_job.to_dataframe()
     df_along = df_a.melt(id_vars=['site_str','n_passes'],value_vars=['p05','p25','p50','p75','p95'], var_name = 'yparam',value_name = 'value')
+    print(c['name'])
+    print(df_a)
+    df_a.to_csv(r'..\charts\{0}_distribs.csv'.format(c['name']))
 
+"""
     #plots
     plt1 = gg.ggplot(df_along, gg.aes(x='n_passes',y='value',color='site_str'))+gg.geom_point()+gg.xlab('N drives')+gg.ylab('Bias (%)')+gg.theme_bw()+gg.xlim(0,100)+gg.facet_wrap('yparam',scales='free_y')
     plt1.save(filename = r'..\charts\bias_{0}.png'.format(c['name']), width=None, height=None, dpi=200)
@@ -60,4 +64,4 @@ for c in charts:
     #combine percentiles
     plt3 = gg.ggplot(df_along, gg.aes(x='n_passes',y='value',color='yparam'))+gg.geom_point()+gg.xlab('N drives')+gg.ylab('Bias (%)')+gg.theme_bw()+gg.xlim(0,100)+gg.ylim(-100,100)+gg.geom_hline(y=25,linetype="dashed",color="gray")+gg.geom_hline(y=-25,linetype="dashed",color="gray")+gg.geom_vline(x=[10,15],linetype="dashed",color="gray")+gg.facet_wrap('site_str')
     plt3.save(filename = r'..\charts\percentiles_{0}.png'.format(c['name']), width=None, height=None, dpi=200)
-
+"""
