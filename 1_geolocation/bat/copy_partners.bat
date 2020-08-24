@@ -1,0 +1,1 @@
+call bq --location=EU cp UK.snap4_drivepass_1hr_medians UK_partners.snap4_drivepass_1hr_medians_v8_2019Oct31
